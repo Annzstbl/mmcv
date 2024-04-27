@@ -277,7 +277,7 @@ def imfrombytes(content: bytes,
         return img
     elif backend == 'tifffile':
         with io.BytesIO(content) as buff:
-            img = tifffile.imread(buff)
+            img = tifffile.imread(buff).transpose([1,2,0])# 修改图像为 HWC
         return img
     else:
         img_np = np.frombuffer(content, np.uint8)

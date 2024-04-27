@@ -103,7 +103,7 @@ def imresize(
     h, w = img.shape[:2]
     if backend is None:
         backend = imread_backend
-    if backend not in ['cv2', 'pillow']:
+    if backend not in ['cv2', 'pillow', 'tifffile']:
         raise ValueError(f'backend: {backend} is not supported for resize.'
                          f"Supported backends are 'cv2', 'pillow'")
 
@@ -112,6 +112,9 @@ def imresize(
         pil_image = Image.fromarray(img)
         pil_image = pil_image.resize(size, pillow_interp_codes[interpolation])
         resized_img = np.array(pil_image)
+    elif backend == 'tifffile':
+        resized_img = cv2.resize(
+            img, size, dst=out, interpolation=cv2_interp_codes[interpolation])
     else:
         resized_img = cv2.resize(
             img, size, dst=out, interpolation=cv2_interp_codes[interpolation])
